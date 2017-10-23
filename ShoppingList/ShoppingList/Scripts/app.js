@@ -5,7 +5,18 @@ function createShoppingList() {
     currentList.items = new Array();
 
     //web service call
-    showShoppingList();
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "api/ShoppingList/",
+        data: currentList,
+        success: function (result) {
+            
+            showShoppingList();
+            
+        }
+    }); 
 }
 
 function showShoppingList() {
@@ -13,6 +24,13 @@ function showShoppingList() {
     $("#shoppingListItems").empty();
     $("#createListDiv").hide();
     $("#shoppingListDiv").show();
+
+    $("#newItemName").focus();
+    $("#newItemName").keyup(function (event) {
+        if (event.keyCode == 13) {
+            addItem();
+        }
+    });
 }
 
 function addItem() {
@@ -22,6 +40,7 @@ function addItem() {
     console.info(currentList);
 
     drawItems();
+    $("#newItemName").val("");
 }
 
 function drawItems() {
@@ -56,21 +75,26 @@ function checkItem(index) {
 }
 
 function getShoppingListById(id) {
-
-    console.info(id);
-    currentList.name = "Mock shopping list";
-    currentList.items = [
-        { name: "Milk" },
-        { name: "Cornflakes" },
-        { name: "Strawberries" }
-    ];
-
-    showShoppingList();
-    drawItems();
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "api/ShoppingList/" + id,
+        success: function (result) {
+            currentList = result;
+            showShoppingList();
+            drawItems();
+        }
+    }); 
 }
 
 $(document).ready(function () {
     console.info("ready");
+    $("#shoppingListName").focus();
+    $("#shoppingListName").keyup(function (event) {
+        if (event.keyCode == 13) {
+            createShoppingList();
+        }
+    });
 
     var pageUrl = window.location.href;
     var idIndex = pageUrl.indexOf("?id=");
