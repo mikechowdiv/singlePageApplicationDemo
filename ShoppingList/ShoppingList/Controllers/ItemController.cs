@@ -20,18 +20,41 @@ namespace ShoppingList.Controllers
             {
                 return NotFound();
             }
+
+            item.Id = shoppingList.Items.Max(i => i.Id) + 1;
             shoppingList.Items.Add(item);
             return Ok(shoppingList);
         }
 
         // PUT: api/Item/5
-        public void Put(int id, [FromBody]string value)
+        public IHttpActionResult Put(int id, [FromBody]Item item)
         {
+            ShopList shoppingList = ShoppingListController.shoppingLists.Where(s => s.Id == item.ShoppingListId).FirstOrDefault();
+            if (shoppingList == null)
+            {
+                return NotFound();
+            }
+
+            Item changedItem = shoppingList.Items.Where(i => i.Id == id).FirstOrDefault();
+            if(changedItem == null)
+            {
+                return NotFound();
+            }
+            changedItem.Checked = item.Checked;
+            return Ok(shoppingList);
         }
 
         // DELETE: api/Item/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
+            ShopList shoppingList = ShoppingListController.shoppingLists[0];
+            Item item = shoppingList.Items.FirstOrDefault(i => i.Id == id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            shoppingList.Items.Remove(item);
+            return Ok(shoppingList);
         }
     }
 }

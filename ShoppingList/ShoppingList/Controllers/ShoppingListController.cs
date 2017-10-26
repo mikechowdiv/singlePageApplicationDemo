@@ -14,9 +14,9 @@ namespace ShoppingList.Controllers
         public static List<ShopList> shoppingLists = new List<ShopList>
         {
             new ShopList(){ Id = 0, Name = "Groceries", Items = {
-                    new Item{ Name = "Milk"},
-                    new Item{ Name = "Cron"},
-                    new Item{ Name = "Strawberries"}
+                    new Item{ Id = 0, Name = "Milk", ShoppingListId = 0 },
+                    new Item{ Id = 1,Name = "Cron", ShoppingListId = 0},
+                    new Item{ Id = 2,Name = "Strawberries", ShoppingListId = 0}
                 }
             },
             new ShopList(){ Id = 1, Name = "Hardware"}
